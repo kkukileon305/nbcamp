@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
@@ -53,6 +54,10 @@ class SignInActivity : AppCompatActivity() {
 
     private val tvPasswordConfirmError: TextView by lazy {
         findViewById(R.id.tv_password_confirm_error)
+    }
+
+    private val btConfirm: Button by lazy {
+        findViewById(R.id.bt_confirm)
     }
 
 
@@ -114,6 +119,7 @@ class SignInActivity : AppCompatActivity() {
         editTexts.forEach { editText ->
             editText.addTextChangedListener {
                 editText.setErrorMessage()
+                setConfirmButtonEnable()
             }
         }
     }
@@ -123,6 +129,7 @@ class SignInActivity : AppCompatActivity() {
             editText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus.not()) {
                     editText.setErrorMessage()
+                    setConfirmButtonEnable()
                 }
             }
         }
@@ -202,4 +209,12 @@ class SignInActivity : AppCompatActivity() {
         } else {
             ""
         }
+
+    private fun setConfirmButtonEnable() {
+        btConfirm.isEnabled = getMessageValidName().isBlank()
+                && getMessageValidEmail().isBlank()
+                && getMessageValidEmailProvider().isBlank()
+                && getMessageValidPassword().isBlank()
+                && getMessageValidPasswordConfirm().isBlank()
+    }
 }
