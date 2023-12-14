@@ -8,8 +8,8 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.view.size
 import androidx.core.widget.addTextChangedListener
 import com.jess.nbcamp.challnge2.R
 
@@ -43,8 +43,16 @@ class SignInActivity : AppCompatActivity() {
         findViewById(R.id.et_password)
     }
 
+    private val tvPasswordError: TextView by lazy {
+        findViewById(R.id.tv_password_error)
+    }
+
     private val etPasswordConfirm: EditText by lazy {
         findViewById(R.id.et_password_confirm)
+    }
+
+    private val tvPasswordConfirmError: TextView by lazy {
+        findViewById(R.id.tv_password_confirm_error)
     }
 
 
@@ -125,6 +133,20 @@ class SignInActivity : AppCompatActivity() {
             etName -> tvNameError.text = getMessageValidName()
             etEmail -> tvEmailError.text = getMessageValidEmail()
             etEmailProvider -> tvEmailError.text = getMessageValidEmailProvider()
+            etPassword -> {
+                val errorMessage = getMessageValidPassword()
+                tvPasswordError.setTextColor(
+                    if (errorMessage.isBlank()) {
+                        ContextCompat.getColor(this@SignInActivity, android.R.color.darker_gray)
+                    } else {
+                        ContextCompat.getColor(this@SignInActivity, android.R.color.holo_red_dark)
+                    }
+                )
+                tvPasswordError.text = errorMessage
+            }
+
+            etPasswordConfirm -> tvPasswordConfirmError.text = getMessageValidPasswordConfirm()
+
             else -> Unit
         }
     }
@@ -145,16 +167,39 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun getMessageValidEmailProvider(): String {
-        val provider = Regex("[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
+        val providerRex = Regex("[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
         val text = etEmailProvider.text.toString()
         return if (
             etEmailProvider.isVisible
             && (etEmailProvider.text.toString().isBlank()
-                    || provider.matches(text).not())
+                    || providerRex.matches(text).not())
         ) {
             getString(R.string.sign_in_email_error_provider)
         } else {
             getMessageValidEmail()
         }
     }
+
+    private fun getMessageValidPassword(): String {
+        val text = etPassword.text.toString()
+        val specialCharacterRegex = Regex("[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]+")
+        val upperCaseRegex = Regex("[A-Z]")
+        return when {
+            text.length < 10 -> getString(R.string.sign_in_password_error_length)
+            specialCharacterRegex.containsMatchIn(text)
+                .not() -> getString(R.string.sign_in_password_error_special)
+
+            upperCaseRegex.containsMatchIn(text)
+                .not() -> getString(R.string.sign_in_password_error_upper)
+
+            else -> ""
+        }
+    }
+
+    private fun getMessageValidPasswordConfirm(): String =
+        if (etPassword.text.toString() != etPasswordConfirm.text.toString()) {
+            getString(R.string.sign_in_confirm_error)
+        } else {
+            ""
+        }
 }
