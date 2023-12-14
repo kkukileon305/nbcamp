@@ -55,6 +55,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
+            <EditText
+                android:id="@+id/et_provider"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:visibility="visible" />
+
             <Spinner
                 android:id="@+id/service_provider"
                 android:layout_width="0dp"
@@ -66,8 +73,8 @@
             android:id="@+id/tv_email_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="이메일을 입력해주세요."
-            android:textColor="@android:color/holo_red_light" />
+            android:textColor="@android:color/holo_red_light"
+            tools:text="이메일을 입력해주세요." />
     </LinearLayout>
 
     <LinearLayout

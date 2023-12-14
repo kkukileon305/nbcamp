@@ -2,7 +2,9 @@
     <string name="sign_in_name">이름</string>
     <string name="sign_in_name_error">이름을 입력해주세요.</string>
     <string name="sign_in_email">이메일</string>
-    <string name="sign_in_email_error">이메일을 입력해주세요.</string>
+    <string name="sign_in_email_error_blank">이메일을 입력해주세요.</string>
+    <string name="sign_in_email_error_at">\u0040를 포함할 수 없습니다.</string>
+    <string name="sign_in_email_error_provider">서비스 제공자를 입력해주세요.</string>
     <string name="sign_in_password">비밀번호</string>
     <string name="sign_in_password_confirm">비밀번호 확인</string>
     <string name="sign_in_confirm">회원가입</string>
