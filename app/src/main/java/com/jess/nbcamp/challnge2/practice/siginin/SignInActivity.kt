@@ -141,15 +141,18 @@ class SignInActivity : AppCompatActivity() {
             etEmail -> tvEmailError.text = getMessageValidEmail()
             etEmailProvider -> tvEmailError.text = getMessageValidEmailProvider()
             etPassword -> {
-                val errorMessage = getMessageValidPassword()
                 tvPasswordError.setTextColor(
-                    if (errorMessage.isBlank()) {
+                    if (etPassword.text.toString().isBlank()) {
                         ContextCompat.getColor(this@SignInActivity, android.R.color.darker_gray)
                     } else {
                         ContextCompat.getColor(this@SignInActivity, android.R.color.holo_red_dark)
                     }
                 )
-                tvPasswordError.text = errorMessage
+                tvPasswordError.text = if (etPassword.text.toString().isBlank()) {
+                    getString(R.string.sign_in_password_hint)
+                } else {
+                    getMessageValidPassword()
+                }
             }
 
             etPasswordConfirm -> tvPasswordConfirmError.text = getMessageValidPasswordConfirm()
