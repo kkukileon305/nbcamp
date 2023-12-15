@@ -1,4 +1,4 @@
-package com.jess.nbcamp.challnge2.practice.siginin
+package com.jess.nbcamp.challnge2.practice.signup
 
 import android.os.Bundle
 import android.view.View
@@ -14,7 +14,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.jess.nbcamp.challnge2.R
 
-class SignInActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
 
     private val etName: EditText by lazy {
         findViewById(R.id.et_name)
@@ -72,7 +72,7 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.sign_in_activity)
+        setContentView(R.layout.sign_up_activity)
 
         initView()
     }
@@ -93,10 +93,10 @@ class SignInActivity : AppCompatActivity() {
             this,
             android.R.layout.simple_spinner_dropdown_item,
             listOf(
-                "gmail.com",
-                "kakao.com",
-                "naver.com",
-                "직접입력"
+                getString(R.string.sign_up_email_provider_gmail),
+                getString(R.string.sign_up_email_provider_kakao),
+                getString(R.string.sign_up_email_provider_naver),
+                getString(R.string.sign_up_email_provider_direct)
             )
         )
 
@@ -143,13 +143,13 @@ class SignInActivity : AppCompatActivity() {
             etPassword -> {
                 tvPasswordError.setTextColor(
                     if (etPassword.text.toString().isBlank()) {
-                        ContextCompat.getColor(this@SignInActivity, android.R.color.darker_gray)
+                        ContextCompat.getColor(this@SignUpActivity, android.R.color.darker_gray)
                     } else {
-                        ContextCompat.getColor(this@SignInActivity, android.R.color.holo_red_dark)
+                        ContextCompat.getColor(this@SignUpActivity, android.R.color.holo_red_dark)
                     }
                 )
                 tvPasswordError.text = if (etPassword.text.toString().isBlank()) {
-                    getString(R.string.sign_in_password_hint)
+                    getString(R.string.sign_up_password_hint)
                 } else {
                     getMessageValidPassword()
                 }
@@ -162,7 +162,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun getMessageValidName(): String = if (etName.text.toString().isBlank()) {
-        getString(R.string.sign_in_name_error)
+        getString(R.string.sign_up_name_error)
     } else {
         ""
     }
@@ -170,8 +170,8 @@ class SignInActivity : AppCompatActivity() {
     private fun getMessageValidEmail(): String {
         val text = etEmail.text.toString()
         return when {
-            text.isBlank() -> getString(R.string.sign_in_email_error_blank)
-            text.contains("@") -> getString(R.string.sign_in_email_error_at)
+            text.isBlank() -> getString(R.string.sign_up_email_error_blank)
+            text.contains("@") -> getString(R.string.sign_up_email_error_at)
             else -> ""
         }
     }
@@ -184,7 +184,7 @@ class SignInActivity : AppCompatActivity() {
             && (etEmailProvider.text.toString().isBlank()
                     || providerRex.matches(text).not())
         ) {
-            getString(R.string.sign_in_email_error_provider)
+            getString(R.string.sign_up_email_error_provider)
         } else {
             getMessageValidEmail()
         }
@@ -195,12 +195,12 @@ class SignInActivity : AppCompatActivity() {
         val specialCharacterRegex = Regex("[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]+")
         val upperCaseRegex = Regex("[A-Z]")
         return when {
-            text.length < 10 -> getString(R.string.sign_in_password_error_length)
+            text.length < 10 -> getString(R.string.sign_up_password_error_length)
             specialCharacterRegex.containsMatchIn(text)
-                .not() -> getString(R.string.sign_in_password_error_special)
+                .not() -> getString(R.string.sign_up_password_error_special)
 
             upperCaseRegex.containsMatchIn(text)
-                .not() -> getString(R.string.sign_in_password_error_upper)
+                .not() -> getString(R.string.sign_up_password_error_upper)
 
             else -> ""
         }
@@ -208,7 +208,7 @@ class SignInActivity : AppCompatActivity() {
 
     private fun getMessageValidPasswordConfirm(): String =
         if (etPassword.text.toString() != etPasswordConfirm.text.toString()) {
-            getString(R.string.sign_in_confirm_error)
+            getString(R.string.sign_up_confirm_error)
         } else {
             ""
         }

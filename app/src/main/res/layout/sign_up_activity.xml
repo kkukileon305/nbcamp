@@ -25,7 +25,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sign_in_name"
+                    android:text="@string/sign_up_name"
                     android:textStyle="bold" />
 
                 <EditText
@@ -50,7 +50,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sign_in_email"
+                    android:text="@string/sign_up_email"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -95,7 +95,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sign_in_password"
+                    android:text="@string/sign_up_password"
                     android:textStyle="bold" />
 
                 <EditText
@@ -107,7 +107,7 @@
                     android:id="@+id/tv_password_error"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sign_in_password_hint"
+                    android:text="@string/sign_up_password_hint"
                     android:textColor="@android:color/darker_gray" />
             </LinearLayout>
 
@@ -120,7 +120,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sign_in_password_confirm"
+                    android:text="@string/sign_up_password_confirm"
                     android:textStyle="bold" />
 
                 <EditText
@@ -143,5 +143,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:enabled="false"
-        android:text="@string/sign_in_confirm" />
+        android:text="@string/sign_up_confirm" />
 </LinearLayout>

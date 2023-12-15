@@ -14,7 +14,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".practice.siginin.SignInActivity"
+            android:name=".practice.signup.SignUpActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
