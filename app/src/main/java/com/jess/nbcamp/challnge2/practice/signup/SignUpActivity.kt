@@ -13,6 +13,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.jess.nbcamp.challnge2.R
+import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.includeSpecialCharacters
+import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.includeUpperCase
+import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.validEmailServiceProvider
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -177,12 +180,11 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun getMessageValidEmailProvider(): String {
-        val providerRex = Regex("[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
         val text = etEmailProvider.text.toString()
         return if (
             etEmailProvider.isVisible
             && (etEmailProvider.text.toString().isBlank()
-                    || providerRex.matches(text).not())
+                    || text.validEmailServiceProvider().not())
         ) {
             getString(R.string.sign_up_email_error_provider)
         } else {
@@ -192,15 +194,13 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun getMessageValidPassword(): String {
         val text = etPassword.text.toString()
-        val specialCharacterRegex = Regex("[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]+")
-        val upperCaseRegex = Regex("[A-Z]")
         return when {
             text.length < 10 -> getString(R.string.sign_up_password_error_length)
-            specialCharacterRegex.containsMatchIn(text)
+
+            text.includeSpecialCharacters()
                 .not() -> getString(R.string.sign_up_password_error_special)
 
-            upperCaseRegex.containsMatchIn(text)
-                .not() -> getString(R.string.sign_up_password_error_upper)
+            text.includeUpperCase().not() -> getString(R.string.sign_up_password_error_upper)
 
             else -> ""
         }
