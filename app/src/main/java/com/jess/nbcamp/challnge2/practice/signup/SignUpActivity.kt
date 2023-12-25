@@ -9,7 +9,6 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.jess.nbcamp.challnge2.R
@@ -145,21 +144,13 @@ class SignUpActivity : AppCompatActivity() {
             etEmail -> tvEmailError.text = getMessageValidEmail()
             etEmailProvider -> tvEmailError.text = getMessageValidEmailProvider()
             etPassword -> {
-                tvPasswordError.setTextColor(
-                    ContextCompat.getColor(
-                        this@SignUpActivity,
-                        if (etPassword.text.toString().isBlank()) {
-                            android.R.color.darker_gray
-                        } else {
-                            android.R.color.holo_red_dark
-                        }
-                    )
-                )
-
-                tvPasswordError.text = if (etPassword.text.toString().isBlank()) {
-                    getString(SignUpErrorMessage.PASSWORD_HINT.message)
-                } else {
-                    getMessageValidPassword()
+                with(tvPasswordError) {
+                    isEnabled = etPassword.text.toString().isNotBlank()
+                    text = if (etPassword.text.toString().isBlank()) {
+                        getString(SignUpErrorMessage.PASSWORD_HINT.message)
+                    } else {
+                        getMessageValidPassword()
+                    }
                 }
             }
 
