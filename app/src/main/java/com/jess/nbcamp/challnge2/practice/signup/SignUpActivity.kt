@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.jess.nbcamp.challnge2.R
+import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.includeAt
 import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.includeSpecialCharacters
 import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.includeUpperCase
 import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.validEmailServiceProvider
@@ -145,14 +146,18 @@ class SignUpActivity : AppCompatActivity() {
             etEmailProvider -> tvEmailError.text = getMessageValidEmailProvider()
             etPassword -> {
                 tvPasswordError.setTextColor(
-                    if (etPassword.text.toString().isBlank()) {
-                        ContextCompat.getColor(this@SignUpActivity, android.R.color.darker_gray)
-                    } else {
-                        ContextCompat.getColor(this@SignUpActivity, android.R.color.holo_red_dark)
-                    }
+                    ContextCompat.getColor(
+                        this@SignUpActivity,
+                        if (etPassword.text.toString().isBlank()) {
+                            android.R.color.darker_gray
+                        } else {
+                            android.R.color.holo_red_dark
+                        }
+                    )
                 )
+
                 tvPasswordError.text = if (etPassword.text.toString().isBlank()) {
-                    getString(R.string.sign_up_password_hint)
+                    getString(SignUpErrorMessage.PASSWORD_HINT.message)
                 } else {
                     getMessageValidPassword()
                 }
@@ -164,19 +169,23 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun getMessageValidName(): String = if (etName.text.toString().isBlank()) {
-        getString(R.string.sign_up_name_error)
-    } else {
-        ""
-    }
+    private fun getMessageValidName(): String = getString(
+        if (etName.text.toString().isBlank()) {
+            SignUpErrorMessage.NAME
+        } else {
+            SignUpErrorMessage.PASS
+        }.message
+    )
 
     private fun getMessageValidEmail(): String {
         val text = etEmail.text.toString()
-        return when {
-            text.isBlank() -> getString(R.string.sign_up_email_error_blank)
-            text.contains("@") -> getString(R.string.sign_up_email_error_at)
-            else -> ""
-        }
+        return getString(
+            when {
+                text.isBlank() -> SignUpErrorMessage.EMAIL_BLANK
+                text.includeAt() -> SignUpErrorMessage.EMAIL_AT
+                else -> SignUpErrorMessage.PASS
+            }.message
+        )
     }
 
     private fun getMessageValidEmailProvider(): String {
@@ -186,7 +195,7 @@ class SignUpActivity : AppCompatActivity() {
             && (etEmailProvider.text.toString().isBlank()
                     || text.validEmailServiceProvider().not())
         ) {
-            getString(R.string.sign_up_email_error_provider)
+            getString(SignUpErrorMessage.EMAIL_SERVICE_PROVIDER.message)
         } else {
             getMessageValidEmail()
         }
@@ -194,24 +203,28 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun getMessageValidPassword(): String {
         val text = etPassword.text.toString()
-        return when {
-            text.length < 10 -> getString(R.string.sign_up_password_error_length)
+        return getString(
+            when {
+                text.length < 10 -> SignUpErrorMessage.PASSWORD_LENGTH
 
-            text.includeSpecialCharacters()
-                .not() -> getString(R.string.sign_up_password_error_special)
+                text.includeSpecialCharacters()
+                    .not() -> SignUpErrorMessage.PASSWORD_SPECIAL_CHARACTERS
 
-            text.includeUpperCase().not() -> getString(R.string.sign_up_password_error_upper)
+                text.includeUpperCase().not() -> SignUpErrorMessage.PASSWORD_UPPER_CASE
 
-            else -> ""
-        }
+                else -> SignUpErrorMessage.PASS
+            }.message
+        )
     }
 
     private fun getMessageValidPasswordConfirm(): String =
-        if (etPassword.text.toString() != etPasswordConfirm.text.toString()) {
-            getString(R.string.sign_up_confirm_error)
-        } else {
-            ""
-        }
+        getString(
+            if (etPassword.text.toString() != etPasswordConfirm.text.toString()) {
+                SignUpErrorMessage.PASSWORD_PASSWORD
+            } else {
+                SignUpErrorMessage.PASS
+            }.message
+        )
 
     private fun setConfirmButtonEnable() {
         btConfirm.isEnabled = getMessageValidName().isBlank()
