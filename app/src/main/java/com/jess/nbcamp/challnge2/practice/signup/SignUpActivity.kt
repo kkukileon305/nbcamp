@@ -89,6 +89,12 @@ class SignUpActivity : AppCompatActivity() {
 
         // 이메일 서비스 제공자 처리
         setServiceProvider()
+
+        btConfirm.setOnClickListener {
+            if (isConfirmButtonEnable()) {
+                // TODO 회원가입 처리
+            }
+        }
     }
 
     private fun setServiceProvider() {
@@ -112,8 +118,7 @@ class SignUpActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                val isVisibleProvider = position == serviceProvider.adapter.count - 1
-                etEmailProvider.isVisible = isVisibleProvider
+                etEmailProvider.isVisible = position == serviceProvider.adapter.count - 1
             }
         }
     }
@@ -122,7 +127,7 @@ class SignUpActivity : AppCompatActivity() {
         editTexts.forEach { editText ->
             editText.addTextChangedListener {
                 editText.setErrorMessage()
-                setConfirmButtonEnable()
+                btConfirm.isEnabled = isConfirmButtonEnable()
             }
         }
     }
@@ -132,7 +137,7 @@ class SignUpActivity : AppCompatActivity() {
             editText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus.not()) {
                     editText.setErrorMessage()
-                    setConfirmButtonEnable()
+                    btConfirm.isEnabled = isConfirmButtonEnable()
                 }
             }
         }
@@ -217,11 +222,9 @@ class SignUpActivity : AppCompatActivity() {
             }.message
         )
 
-    private fun setConfirmButtonEnable() {
-        btConfirm.isEnabled = getMessageValidName().isBlank()
-                && getMessageValidEmail().isBlank()
-                && getMessageValidEmailProvider().isBlank()
-                && getMessageValidPassword().isBlank()
-                && getMessageValidPasswordConfirm().isBlank()
-    }
+    private fun isConfirmButtonEnable() = getMessageValidName().isBlank()
+            && getMessageValidEmail().isBlank()
+            && getMessageValidEmailProvider().isBlank()
+            && getMessageValidPassword().isBlank()
+            && getMessageValidPasswordConfirm().isBlank()
 }
