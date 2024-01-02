@@ -1,5 +1,8 @@
 package com.jess.nbcamp.challnge2.practice.signup
 
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -11,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import com.jess.nbcamp.challnge2.R
 import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.includeAt
 import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.includeSpecialCharacters
@@ -18,6 +22,21 @@ import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.includeUpp
 import com.jess.nbcamp.challnge2.practice.signup.SignUpValidExtension.validEmailServiceProvider
 
 class SignUpActivity : AppCompatActivity() {
+
+    companion object {
+
+        const val EXTRA_ENTRY_TYPE = "extra_entry_type"
+        const val EXTRA_USER_ENTITY = "extra_user_entity"
+
+        fun newIntent(
+            context: Context,
+            entryType: SignUpEntryType,
+            entity: SignUpUserEntity
+        ): Intent = Intent(context, SignUpActivity()::class.java).apply {
+            putExtra(EXTRA_ENTRY_TYPE, entryType.ordinal)
+            putExtra(EXTRA_USER_ENTITY, entity)
+        }
+    }
 
     private val etName: EditText by lazy {
         findViewById(R.id.et_name)
@@ -63,6 +82,27 @@ class SignUpActivity : AppCompatActivity() {
         findViewById(R.id.bt_confirm)
     }
 
+    private val emailProvider
+        get() = listOf(
+            getString(R.string.sign_up_email_provider_gmail),
+            getString(R.string.sign_up_email_provider_kakao),
+            getString(R.string.sign_up_email_provider_naver),
+            getString(R.string.sign_up_email_provider_direct)
+        )
+
+    private val entryType: SignUpEntryType by lazy {
+        SignUpEntryType.getEntryType(
+            intent?.getIntExtra(EXTRA_ENTRY_TYPE, 0)
+        )
+    }
+
+    private val userEntity: SignUpUserEntity? by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent?.getParcelableExtra(EXTRA_USER_ENTITY, SignUpUserEntity::class.java)
+        } else {
+            intent?.getParcelableExtra(EXTRA_USER_ENTITY)
+        }
+    }
 
     private val editTexts
         get() = listOf(
@@ -76,7 +116,7 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_up_activity)
-
+        
         initView()
     }
 
@@ -90,11 +130,40 @@ class SignUpActivity : AppCompatActivity() {
         // 이메일 서비스 제공자 처리
         setServiceProvider()
 
-        btConfirm.setOnClickListener {
-            if (isConfirmButtonEnable()) {
-                // TODO 회원가입 처리
+        // 버튼 이름 변경
+        with(btConfirm) {
+            setText(
+                if (entryType == SignUpEntryType.UPDATE) {
+                    R.string.sign_up_update
+                } else {
+                    R.string.sign_up_confirm
+                }
+            )
+
+            setOnClickListener {
+                if (isConfirmButtonEnable()) {
+                    // TODO 회원가입 처리
+                }
             }
         }
+
+        setUserEntity()
+    }
+
+    private fun setUserEntity() {
+        etName.setText(userEntity?.name)
+        etEmail.setText(userEntity?.email)
+
+        val index = emailProvider.indexOf(userEntity?.emailService)
+        // -1 일 경우 못찾음
+        serviceProvider.setSelection(
+            if (index < 0) {
+                etEmailProvider.setText(userEntity?.emailService)
+                emailProvider.lastIndex
+            } else {
+                index
+            }
+        )
     }
 
     private fun setServiceProvider() {

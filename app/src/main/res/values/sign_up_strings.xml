@@ -16,6 +16,7 @@
     <string name="sign_up_password_error_upper">대문자를 포함시켜주세요.</string>
     <string name="sign_up_password_confirm">비밀번호 확인</string>
     <string name="sign_up_confirm">회원가입</string>
+    <string name="sign_up_update">회원수정</string>
     <string name="sign_up_confirm_error">비밀번호가 다릅니다.</string>
 
     <string name="sign_up_pass" />
