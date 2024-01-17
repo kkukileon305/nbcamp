@@ -9,7 +9,6 @@ import com.jess.nbcamp.challnge2.practice.signup.SignUpEntryType
 import com.jess.nbcamp.challnge2.practice.signup.SignUpUserEntity
 
 class UserActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_activity)
